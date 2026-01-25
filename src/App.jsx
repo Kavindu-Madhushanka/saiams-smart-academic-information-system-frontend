@@ -4,6 +4,7 @@ import Home from "./component/home/Home";
 import Login from "./component/login/Login";
 import AdminDashboard from "./component/admin/AdminDashboard";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import StudentManagement from "./component/admin/student management/StudentManagement";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/studentmanagement" element={<StudentManagement />} />
       </Routes>
     </BrowserRouter>
   );
