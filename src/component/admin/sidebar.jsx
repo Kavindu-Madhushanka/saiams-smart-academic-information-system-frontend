@@ -9,14 +9,14 @@ import { IoIosAlert } from "react-icons/io";
 import { IoIosSettings } from "react-icons/io";
 import { IoIosLogOut } from "react-icons/io";
 const SidebarItem = ({ icon: Icon, label, active }) => (
-  <div className="flex items-center gap-3 p-3 text-white transition-all rounded-lg cursor-pointer hover:bg-blue-600">
+  <div className="flex items-center gap-3 p-3 text-white transition-all rounded-lg cursor-pointer  hover:bg-blue-600">
     <Icon size={20} />
     <span className="text-sm font-medium">{label}</span>
   </div>
 );
 const Sidebar = () => {
   return (
-    <div className="w-64 h-screen bg-[#0f111a] p-4 flex flex-col border-r border-gray-800">
+    <div className="w-64 h-screen bg-[#0f111a] p-4 flex flex-col border-r border-gray-800 fixed">
       <div className="flex items-center gap-2 px-2 mb-8 text-xl font-bold text-blue-400">
         <div className="flex items-center justify-center w-8 h-8 italic text-white bg-blue-500 rounded">
           S
@@ -36,7 +36,11 @@ const Sidebar = () => {
 
       <div className="pt-4 space-y-2 border-t border-gray-800">
         <SidebarItem icon={IoIosSettings} label="System Settings" />
-        <SidebarItem icon={IoIosLogOut} label="Logout" />
+        <SidebarItem
+          icon={IoIosLogOut}
+          label="Logout"
+          className="text-red-500"
+        />
       </div>
     </div>
   );
