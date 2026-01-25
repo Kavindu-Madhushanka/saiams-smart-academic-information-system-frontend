@@ -30,7 +30,9 @@ const Sidebar = () => {
         <Link to={"/studentmanagement"}>
           <SidebarItem icon={FaRegUser} label="Student Management" />
         </Link>
-        <SidebarItem icon={FaUserCheck} label="Lecturer Management" />
+        <Link to={"/lecturemanagement"}>
+          <SidebarItem icon={FaUserCheck} label="Lecturer Management" />
+        </Link>
         <SidebarItem icon={FaBookOpen} label="Assign Subjects" />
         <SidebarItem icon={SlCalender} label="Attendance" />
         <SidebarItem icon={AiFillFileText} label="Results & ICA" />

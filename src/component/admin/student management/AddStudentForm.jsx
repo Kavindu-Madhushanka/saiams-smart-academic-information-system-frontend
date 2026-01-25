@@ -3,7 +3,7 @@ import { IoClose } from "react-icons/io5";
 
 const AddStudentForm = ({ onClose }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center ml-64 bg-black/40">
+    <div className="fixed inset-0 z-50 flex items-center justify-center ml-64 bg-black/40 ">
       {/* Modal Card */}
       <div className="bg-white text-[#1a1c26] w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         {/* Header */}

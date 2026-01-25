@@ -5,7 +5,10 @@ import { FaSearch } from "react-icons/fa";
 import { FaFilter } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
+import { useState } from "react";
+import AddStudentForm from "./AddStudentForm";
 const StudentManagement = () => {
+  const [isAddStudentFormOpen, setIsAddStudentFormOpen] = useState(false);
   const students = [
     {
       id: "TEC/2023/042",
@@ -91,7 +94,9 @@ const StudentManagement = () => {
   return (
     <div className="flex bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#4c1d95] min-h-screen text-white font-sans">
       <Sidebar />
-      <main className="flex-1 p-8 ml-64 overflow-y-auto">
+      <main
+        className={`flex-1 p-8 ml-64 overflow-y-auto transition-all duration-300 ${isAddStudentFormOpen ? "blur-md pointer-events-none" : ""}`}
+      >
         {/* header section */}
         <div className="flex items-end justify-between mb-8">
           <div>
@@ -105,7 +110,10 @@ const StudentManagement = () => {
             <button className="flex items-center gap-2 bg-[#1a1c26] px-4 py-2 rounded-lg border border-gray-700 text-sm font-medium hover:bg-gray-800">
               <FaFileExport /> Bulk Upload
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 rounded-lg hover:bg-blue-700">
+            <button
+              onClick={() => setIsAddStudentFormOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 rounded-lg hover:bg-blue-700"
+            >
               <FaUserPlus /> Add New Student
             </button>
           </div>
@@ -197,6 +205,9 @@ const StudentManagement = () => {
           </div>
         </div>
       </main>
+      {isAddStudentFormOpen && (
+        <AddStudentForm onClose={() => setIsAddStudentFormOpen(false)} />
+      )}
     </div>
   );
 };
