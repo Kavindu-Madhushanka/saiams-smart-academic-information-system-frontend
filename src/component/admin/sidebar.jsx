@@ -8,8 +8,9 @@ import { AiFillFileText } from "react-icons/ai";
 import { IoIosAlert } from "react-icons/io";
 import { IoIosSettings } from "react-icons/io";
 import { IoIosLogOut } from "react-icons/io";
+import { Link } from "react-router-dom";
 const SidebarItem = ({ icon: Icon, label, active }) => (
-  <div className="flex items-center gap-3 p-3 text-white transition-all rounded-lg cursor-pointer  hover:bg-blue-600">
+  <div className="flex items-center gap-3 p-3 text-white transition-all rounded-lg cursor-pointer hover:bg-blue-600">
     <Icon size={20} />
     <span className="text-sm font-medium">{label}</span>
   </div>
@@ -26,7 +27,9 @@ const Sidebar = () => {
 
       <div className="flex-1 space-y-2">
         <SidebarItem icon={LuLayoutDashboard} label="Dashboard" />
-        <SidebarItem icon={FaRegUser} label="Student Management" />
+        <Link to={"/studentmanagement"}>
+          <SidebarItem icon={FaRegUser} label="Student Management" />
+        </Link>
         <SidebarItem icon={FaUserCheck} label="Lecturer Management" />
         <SidebarItem icon={FaBookOpen} label="Assign Subjects" />
         <SidebarItem icon={SlCalender} label="Attendance" />
