@@ -15,7 +15,7 @@ const AdminDashboard = () => {
       <Sidebar />
       <main className="flex-1 p-8 ml-64 overflow-y-auto">
         {/*header section*/}
-        <header className="flex items-center justify-between mb-8">
+        <header className="flex items-center justify-between mb-8 ">
           <div>
             <h1 className="text-3xl font-bold">System Console</h1>
             <p className="text-gray-400">
