@@ -9,6 +9,8 @@ import {
   FaGraduationCap,
   FaChalkboardTeacher,
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Login = ({ icon, title }) => {
   const [searchparam] = useSearchParams();
@@ -19,6 +21,14 @@ const Login = ({ icon, title }) => {
     Lecture: <FaChalkboardTeacher size={24} />,
   };
   const { showpassword, setpassword } = useState(false);
+  const dashboardparth =
+    role === "Admin"
+      ? "/admindashboard"
+      : role === "Lecture"
+        ? "/lecture-dashboard"
+        : role === "Student"
+          ? "/student-dashboard"
+          : "/";
 
   return (
     <div className="flex flex-col min-h-screen font-sans md:flex-row">
@@ -85,12 +95,14 @@ const Login = ({ icon, title }) => {
                 </div>
               </div>
             </div>
-            <button
-              type="submit"
-              className="w-full bg-[#4c1d95] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#1e1b4b] transform active:scale-[0.98] transition-all shadow-lg shadow-blue-700/20"
-            >
-              Login
-            </button>
+            <Link to={dashboardparth}>
+              <button
+                type="submit"
+                className="w-full bg-[#4c1d95] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#1e1b4b] transform active:scale-[0.98] transition-all shadow-lg shadow-blue-700/20"
+              >
+                Login
+              </button>
+            </Link>
           </form>
         </div>
       </div>
