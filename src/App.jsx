@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import StudentManagement from "./component/admin/student management/StudentManagement";
 import AddStudentForm from "./component/admin/student management/AddStudentForm";
 import LectureManagement from "./component/admin/lecture management/LectureManagement";
+import AddLecturerForm from "./component/admin/lecture management/AddLecturerForm";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/studentmanagement" element={<StudentManagement />} />
         <Route path="/addstudentform" element={<AddStudentForm />} />
         <Route path="/lecturemanagement" element={<LectureManagement />} />
+        <Route path="/addlectureform" element={<AddLecturerForm />} />
       </Routes>
     </BrowserRouter>
   );
