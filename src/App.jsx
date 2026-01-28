@@ -8,6 +8,8 @@ import StudentManagement from "./component/admin/student management/StudentManag
 import AddStudentForm from "./component/admin/student management/AddStudentForm";
 import LectureManagement from "./component/admin/lecture management/LectureManagement";
 import AddLecturerForm from "./component/admin/lecture management/AddLecturerForm";
+import SubjectManagement from "./component/subject management/SubjectManagement";
+import CreateSubjectForm from "./component/subject management/CreateSubjectForm";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/addstudentform" element={<AddStudentForm />} />
         <Route path="/lecturemanagement" element={<LectureManagement />} />
         <Route path="/addlectureform" element={<AddLecturerForm />} />
+        <Route path="/subjectmanagement" element={<SubjectManagement />} />
+        <Route path="/createsubjecform" element={<CreateSubjectForm />} />
       </Routes>
     </BrowserRouter>
   );
