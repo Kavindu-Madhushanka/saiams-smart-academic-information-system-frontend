@@ -10,6 +10,7 @@ import LectureManagement from "./component/admin/lecture management/LectureManag
 import AddLecturerForm from "./component/admin/lecture management/AddLecturerForm";
 import SubjectManagement from "./component/subject management/SubjectManagement";
 import CreateSubjectForm from "./component/subject management/CreateSubjectForm";
+import AssignSubjectForm from "./component/subject management/AssignSubjectForm";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/addlectureform" element={<AddLecturerForm />} />
         <Route path="/subjectmanagement" element={<SubjectManagement />} />
         <Route path="/createsubjecform" element={<CreateSubjectForm />} />
+        <Route path="/assignsubjectform" element={<AssignSubjectForm />} />
       </Routes>
     </BrowserRouter>
   );
