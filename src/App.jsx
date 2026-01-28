@@ -11,6 +11,7 @@ import AddLecturerForm from "./component/admin/lecture management/AddLecturerFor
 import SubjectManagement from "./component/subject management/SubjectManagement";
 import CreateSubjectForm from "./component/subject management/CreateSubjectForm";
 import AssignSubjectForm from "./component/subject management/AssignSubjectForm";
+import ViewSubjectAndLecture from "./component/subject management/ViewSubjectAndLecture";
 
 function App() {
   return (
@@ -27,6 +28,10 @@ function App() {
         <Route path="/subjectmanagement" element={<SubjectManagement />} />
         <Route path="/createsubjecform" element={<CreateSubjectForm />} />
         <Route path="/assignsubjectform" element={<AssignSubjectForm />} />
+        <Route
+          path="/viewsubjectandlecture"
+          element={<ViewSubjectAndLecture />}
+        />
       </Routes>
     </BrowserRouter>
   );
