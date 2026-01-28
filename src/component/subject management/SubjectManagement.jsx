@@ -21,6 +21,19 @@ const SubjectManagement = () => {
     setActiveView("view");
     setIsFormOpen(true);
   };
+  const renderActiveComponent = () => {
+    if (!isFormOpen) return null;
+
+    switch (activeView) {
+      case "create":
+        return <CreateSubjectForm onClose={() => setIsFormOpen(false)} />;
+
+      case "assign":
+
+      default:
+        return null;
+    }
+  };
   return (
     <div className="flex bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#4c1d95] min-h-screen text-white font-sans">
       <Sidebar />
@@ -78,7 +91,7 @@ const SubjectManagement = () => {
           </div>
         </div>
       </main>
-      {isFormOpen && <CreateSubjectForm onClose={() => setIsFormOpen(false)} />}
+      {renderActiveComponent()}
     </div>
   );
 };
