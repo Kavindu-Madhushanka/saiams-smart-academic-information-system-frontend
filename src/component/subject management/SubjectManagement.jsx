@@ -4,6 +4,7 @@ import { ImBooks } from "react-icons/im";
 import { GiTeacher } from "react-icons/gi";
 import { MdOutlinePageview } from "react-icons/md";
 import CreateSubjectForm from "./CreateSubjectForm";
+import AssignSubjectForm from "./AssignSubjectForm";
 const SubjectManagement = () => {
   const [activeView, setActiveView] = useState("none");
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -29,6 +30,7 @@ const SubjectManagement = () => {
         return <CreateSubjectForm onClose={() => setIsFormOpen(false)} />;
 
       case "assign":
+        return <AssignSubjectForm onClose={() => setIsFormOpen(false)} />;
 
       default:
         return null;
