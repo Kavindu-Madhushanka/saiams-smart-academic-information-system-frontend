@@ -31,15 +31,80 @@ const CreateSubjectForm = ({ onClose }) => {
         {/* Form Body */}
         <div className="grid grid-cols-2 gap-6 p-8">
           <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-300">
+            <label className="text-sm font-medium text-gray-700">
               Subject Name <span className="text-blue-500">*</span>
             </label>
             <input
               type="text"
               name="subjectName"
               placeholder="e.g. Advanced Data Structures"
-              className="bg-[#1f2937] border border-gray-700 text-gray-200 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Subject Code <span className="text-blue-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="subjectCode"
+              placeholder="e.g.TICT3123"
+              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Credits <span className="text-blue-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="subjectCredits"
+              placeholder="Enter Credit"
+              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Subject Type <span className="text-blue-500">*</span>
+            </label>
+            <select
+              name="subjectType"
+              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            >
+              <option>Theory</option>
+              <option selected>Practical</option>
+            </select>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Academic Level <span className="text-blue-500">*</span>
+            </label>
+            <select
+              name="Level"
+              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            >
+              <option>Level 1</option>
+              <option>Level 2</option>
+              <option>Level 3</option>
+              <option>Level 4</option>
+            </select>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Semester <span className="text-blue-500">*</span>
+            </label>
+            <select
+              name="subjectType"
+              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            >
+              <option>Semester 1</option>
+              <option>Semester 2</option>
+            </select>
           </div>
         </div>
         {/* Footer */}
