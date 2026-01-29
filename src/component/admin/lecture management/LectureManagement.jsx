@@ -107,7 +107,7 @@ const LecturerManagement = () => {
 
         {/* Table Section  */}
         <div className="bg-[#161922] border-x border-b border-gray-800 rounded-b-xl overflow-hidden">
-          <div className="max-h-[400px] overflow-y-auto">
+          <div className="max-h-[335px] overflow-y-auto">
             <table className="w-full text-sm text-left">
               <thead className="bg-[#1a1c26] text-gray-400 uppercase text-[10px] tracking-wider sticky top-0 z-10">
                 <tr>
@@ -120,7 +120,7 @@ const LecturerManagement = () => {
                   <th className="px-6 py-4 text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-gray-800 ">
                 {lecturers.map((lecturer, idx) => (
                   <tr key={idx} className="transition-colors hover:bg-white/5">
                     <td className="px-6 py-4 font-mono text-xs text-blue-400">
