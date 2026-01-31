@@ -37,7 +37,9 @@ const Sidebar = () => {
         <Link to={"/subjectmanagement"}>
           <SidebarItem icon={FaBookOpen} label="Subjects Management" />
         </Link>
-        <SidebarItem icon={SlCalender} label="Attendance" />
+        <Link to={"/attendencedashboard"}>
+          <SidebarItem icon={SlCalender} label="Attendance" />
+        </Link>
         <SidebarItem icon={AiFillFileText} label="Results & ICA" />
         <SidebarItem icon={IoIosAlert} label="Issue Reports" />
       </div>
