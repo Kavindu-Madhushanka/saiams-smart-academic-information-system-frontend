@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate, Navigate } from "react-router-dom";
 import logoimage from "../../assets/universitylogo.jpg";
 import { FaRegUser } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
 import { RiLockPasswordLine } from "react-icons/ri";
+import axios from "axios";
 import {
   FaUserCog,
   FaGraduationCap,
   FaChalkboardTeacher,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const Login = ({ icon, title }) => {
@@ -20,15 +20,45 @@ const Login = ({ icon, title }) => {
     Student: <FaGraduationCap size={24} />,
     Lecture: <FaChalkboardTeacher size={24} />,
   };
-  const { showpassword, setpassword } = useState(false);
-  const dashboardparth =
-    role === "Admin"
-      ? "/admindashboard"
-      : role === "Lecture"
-        ? "/lecture-dashboard"
-        : role === "Student"
-          ? "/student-dashboard"
-          : "/";
+  const [showpassword, setshowpassword] = useState(false);
+  const [username, setusername] = useState("");
+  const [password, setpassword] = useState("");
+  const [error, seterror] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    seterror("");
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5104/api/Auth/login",
+        {
+          username: username,
+          password: password,
+          role: role,
+        },
+      );
+
+      if (response.status === 200) {
+        localStorage.setItem("username", response.data.username);
+
+        const dashboardparth =
+          role === "Admin"
+            ? "/admindashboard"
+            : role === "Lecture"
+              ? "/lecture-dashboard"
+              : role === "Student"
+                ? "/student-dashboard"
+                : "/";
+        navigate(dashboardparth);
+      }
+    } catch (err) {
+      seterror(
+        err.response?.data?.message || "Login failed. Check your connection.",
+      );
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen font-sans md:flex-row">
@@ -63,8 +93,13 @@ const Login = ({ icon, title }) => {
           <div className="flex items-center justify-center w-12 h-12 -mt-3 rounded-full bg-slate-300">
             {roleIcon[role]}
           </div>
+          {error && (
+            <p className="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+              {error}
+            </p>
+          )}
           {/*user input*/}
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleLogin}>
             <div>
               <label className="block pt-2 mb-2 text-sm font-bold text-gray-700">
                 Username
@@ -75,6 +110,8 @@ const Login = ({ icon, title }) => {
                 </div>
                 <input
                   type="text"
+                  value={username}
+                  onChange={(e) => setusername(e.target.value)}
                   placeholder="Enter your username"
                   className="block w-full pl-12 pr-4 py-4 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-[#1a36cc]/20 focus:border-[#4c1d95] outline-none transition-all text-gray-900"
                 />
@@ -89,20 +126,28 @@ const Login = ({ icon, title }) => {
                   </div>
                   <input
                     type={showpassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setpassword(e.target.value)}
                     placeholder="••••••••"
                     className="block w-full pl-12 pr-12 py-4 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-[#1a36cc]/20 focus:border-[#4c1d95] outline-none transition-all text-gray-900"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setshowpassword(!showpassword)}
+                    className="absolute inset-y-0 flex items-center text-gray-400 right-4"
+                  >
+                    <FaRegEye size={20} />
+                  </button>
                 </div>
               </div>
             </div>
-            <Link to={dashboardparth}>
-              <button
-                type="submit"
-                className="w-full bg-[#4c1d95] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#1e1b4b] transform active:scale-[0.98] transition-all shadow-lg shadow-blue-700/20"
-              >
-                Login
-              </button>
-            </Link>
+
+            <button
+              type="submit"
+              className="w-full bg-[#4c1d95] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#1e1b4b] transform active:scale-[0.98] transition-all shadow-lg shadow-blue-700/20"
+            >
+              Login
+            </button>
           </form>
         </div>
       </div>
