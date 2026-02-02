@@ -1,7 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
+import axios from "axios";
 
 const AddStudentForm = ({ onClose }) => {
+  const [formData, setformData] = useState({
+    studentName: "",
+    email: "",
+    registationNumber: "",
+    department: "ICT",
+    faculty: "Technology",
+    academicYear: "",
+    role: "student",
+    password: "Student@123",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setformData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5104/api/Auth/registerStudent",
+        formData,
+      );
+      alert(response.data.message);
+      onClose();
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.response?.data?.message || "Registration failed!");
+    }
+  };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center ml-64 bg-black/40 ">
       {/* Modal Card */}
@@ -28,13 +62,15 @@ const AddStudentForm = ({ onClose }) => {
         </div>
 
         {/* Form Body */}
-        <div className="grid grid-cols-2 gap-6 p-8">
+        <form className="grid grid-cols-2 gap-6 p-8" onSubmit={handleSubmit}>
           <div className="space-y-1">
             <label className="text-xs font-bold text-gray-700 uppercase">
               Student Name
             </label>
             <input
               type="text"
+              name="studentName"
+              onChange={handleChange}
               placeholder="Enter full name"
               className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
@@ -46,6 +82,8 @@ const AddStudentForm = ({ onClose }) => {
             </label>
             <input
               type="text"
+              name="registationNumber"
+              onChange={handleChange}
               placeholder="e.g. REG/2023/001"
               className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none"
             />
@@ -79,11 +117,12 @@ const AddStudentForm = ({ onClose }) => {
             <label className="text-xs font-bold text-gray-700 uppercase">
               Academic Year
             </label>
-            <select className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none">
-              <option>Select year</option>
-              <option>2023/24</option>
-              <option>2022/23</option>
-            </select>
+            <input
+              type="text"
+              name="academicYear"
+              onChange={handleChange}
+              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none"
+            />
           </div>
 
           <div className="space-y-1">
@@ -92,6 +131,8 @@ const AddStudentForm = ({ onClose }) => {
             </label>
             <input
               type="email"
+              name="email"
+              onChange={handleChange}
               placeholder="student@example.com"
               className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none"
             />
@@ -116,7 +157,10 @@ const AddStudentForm = ({ onClose }) => {
               change it later.
             </p>
           </div>
-        </div>
+          <button className="px-6 py-2 font-medium text-white transition-all bg-blue-600 rounded-lg shadow-md hover:bg-blue-700">
+            Register Student
+          </button>
+        </form>
 
         {/* Footer */}
         <div className="flex justify-end gap-3 p-6 border-t border-gray-100 bg-gray-50">
@@ -125,9 +169,6 @@ const AddStudentForm = ({ onClose }) => {
             className="px-6 py-2 font-medium text-gray-600 transition-colors rounded-lg hover:bg-gray-200"
           >
             Cancel
-          </button>
-          <button className="px-6 py-2 font-medium text-white transition-all bg-blue-600 rounded-lg shadow-md hover:bg-blue-700">
-            Register Student
           </button>
         </div>
       </div>
