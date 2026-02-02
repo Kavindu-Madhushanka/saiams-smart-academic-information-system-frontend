@@ -5,92 +5,27 @@ import { FaSearch } from "react-icons/fa";
 import { FaFilter } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddStudentForm from "./AddStudentForm";
+import axios from "axios";
+
 const StudentManagement = () => {
   const [isAddStudentFormOpen, setIsAddStudentFormOpen] = useState(false);
-  const students = [
-    {
-      id: "TEC/2023/042",
-      name: "Alex Simon",
-      initial: "AS",
-      dept: "Technology",
-      subDept: "ICT",
-      year: "2023/24",
-      email: "alex.s@saiams.edu",
-      status: "Active",
-    },
-    {
-      id: "TEC/2023/118",
-      name: "Maria Lopez",
-      initial: "ML",
-      dept: "Technology",
-      subDept: "ICT",
-      year: "2023/24",
-      email: "maria.l@saiams.edu",
-      status: "Active",
-    },
-    {
-      id: "TEC/2022/089",
-      name: "James Kim",
-      initial: "JK",
-      dept: "Technology",
-      subDept: "Engineering",
-      year: "2022/23",
-      email: "james.k@saiams.edu",
-      status: "On Leave",
-    },
-    {
-      id: "TEC/2023/201",
-      name: "Sarah Hughes",
-      initial: "SH",
-      dept: "Technology",
-      subDept: "ICT",
-      year: "2023/24",
-      email: "sarah.h@saiams.edu",
-      status: "Active",
-    },
-    {
-      id: "TEC/2023/042",
-      name: "Alex Simon",
-      initial: "AS",
-      dept: "Technology",
-      subDept: "ICT",
-      year: "2023/24",
-      email: "alex.s@saiams.edu",
-      status: "Active",
-    },
-    {
-      id: "TEC/2023/042",
-      name: "Alex Simon",
-      initial: "AS",
-      dept: "Technology",
-      subDept: "ICT",
-      year: "2023/24",
-      email: "alex.s@saiams.edu",
-      status: "Active",
-    },
-    {
-      id: "TEC/2023/042",
-      name: "Alex Simon",
-      initial: "AS",
-      dept: "Technology",
-      subDept: "ICT",
-      year: "2023/24",
-      email: "alex.s@saiams.edu",
-      status: "Active",
-    },
-    {
-      id: "TEC/2023/042",
-      name: "Alex Simon",
-      initial: "AS",
-      dept: "Technology",
-      subDept: "ICT",
-      year: "2023/24",
-      email: "alex.s@saiams.edu",
-      status: "Active",
-    },
-  ];
+  const [students, setStudent] = useState([]);
+
+  const fetchStudents = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5104/api/Auth/getStudent",
+      );
+      setStudent(response.data);
+    } catch (error) {
+      console.error("Error fetching students:", error);
+    }
+  };
+  useEffect(() => {
+    fetchStudents();
+  }, []);
   return (
     <div className="flex bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#4c1d95] min-h-screen text-white font-sans">
       <Sidebar />
@@ -142,44 +77,27 @@ const StudentManagement = () => {
             <table className="w-full text-sm text-left">
               <thead className="bg-[#1a1c26] text-gray-400 uppercase text-[10px] tracking-wider sticky top-0 z-10">
                 <tr>
-                  <th className="px-6 py-4">Reg No</th>
+                  <th className="px-6 py-6">No</th>
+                  <th className="px-6 py-4">Registation-No</th>
                   <th className="px-6 py-4">Name</th>
-                  <th className="px-6 py-4">Faculty / Dept</th>
+                  <th className="px-6 py-4">Faculty</th>
+                  <th className="px-6 py-4">Department</th>
                   <th className="px-6 py-4">Academic Year</th>
                   <th className="px-6 py-4">Email</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
                 {students.map((student, idx) => (
                   <tr key={idx} className="transition-colors hover:bg-white/5">
-                    <td className="px-6 py-4 font-mono text-gray-300">
-                      {student.id}
+                    <td className="px-6 py-6">{idx + 1}</td>
+                    <td className="px-6 py-4">{student.st_registation_no}</td>
+                    <td className="px-6 py-4">{student.st_fullname}</td>
+                    <td className="px-6 py-4">{student.faculty}</td>
+                    <td className="px-6 py-4 text-gray-400">
+                      {student.department}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-8 h-8 text-xs font-bold text-blue-400 rounded-full bg-blue-900/50">
-                          {student.initial}
-                        </div>
-                        <span className="font-medium">{student.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="font-medium">{student.dept}</div>
-                      <div className="text-[10px] text-gray-500 uppercase">
-                        {student.subDept}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-gray-400">{student.year}</td>
-                    <td className="px-6 py-4 text-gray-400">{student.email}</td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${student.status === "Active" ? "bg-green-500/10 text-green-400" : "bg-orange-500/10 text-orange-400"}`}
-                      >
-                        {student.status}
-                      </span>
-                    </td>
+                    <td className="px-6 py-4">{student.academic_year}</td>
+                    <td className="px-6 py-4">{student.st_email}</td>
                     <td className="px-6 py-4">
                       <div className="flex justify-center gap-3 text-gray-400">
                         <FaEdit className="cursor-pointer hover:text-blue-400" />
@@ -206,7 +124,12 @@ const StudentManagement = () => {
         </div>
       </main>
       {isAddStudentFormOpen && (
-        <AddStudentForm onClose={() => setIsAddStudentFormOpen(false)} />
+        <AddStudentForm
+          onClose={() => {
+            setIsAddStudentFormOpen(false);
+            fetchStudents();
+          }}
+        />
       )}
     </div>
   );
