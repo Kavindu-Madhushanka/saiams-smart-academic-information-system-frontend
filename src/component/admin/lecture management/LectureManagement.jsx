@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { FaSearch } from "react-icons/fa";
 import { FaFilter } from "react-icons/fa";
@@ -6,6 +6,7 @@ import { FaFileExport } from "react-icons/fa";
 import { FaUserPlus } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
+import axios from "axios";
 
 import AddLecturerForm from "./AddLecturerForm";
 import Sidebar from "../sidebar";
@@ -13,48 +14,21 @@ import Sidebar from "../sidebar";
 const LecturerManagement = () => {
   const [isAddLecturerFormOpen, setIsAddLecturerFormOpen] = useState(false);
 
-  const lecturers = [
-    {
-      id: "#L-4091",
-      name: "Dr. Emily Robertson",
-      initial: "ER",
-      faculty: "Technology",
-      dept: "ICT",
-      role: "Senior Lecturer",
-      email: "emily.r@saiams.edu",
-      status: "Active",
-    },
-    {
-      id: "#L-4095",
-      name: "Prof. Marcus Chen",
-      initial: "MC",
-      faculty: "Technology",
-      dept: "ICT",
-      role: "Professor",
-      email: "m.chen@saiams.edu",
-      status: "Active",
-    },
-    {
-      id: "#L-3822",
-      name: "Sarah Jenkins",
-      initial: "SJ",
-      faculty: "Technology",
-      dept: "ICT",
-      role: "Assistant Lecturer",
-      email: "s.jenkins@saiams.edu",
-      status: "Inactive",
-    },
-    {
-      id: "#L-4112",
-      name: "David Watson",
-      initial: "DW",
-      faculty: "Technology",
-      dept: "ICT",
-      role: "Lecturer",
-      email: "d.watson@saiams.edu",
-      status: "Active",
-    },
-  ];
+  const [lectureData, setLectureData] = useState([]);
+
+  const fetchLectur = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5104/api/Auth/getlecture",
+      );
+      setLectureData(response.data);
+    } catch (error) {
+      console.error("Error fetching students:", error);
+    }
+  };
+  useEffect(() => {
+    fetchLectur();
+  }, []);
 
   return (
     <div className="flex bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#4c1d95] min-h-screen text-white font-sans">
@@ -111,48 +85,27 @@ const LecturerManagement = () => {
             <table className="w-full text-sm text-left">
               <thead className="bg-[#1a1c26] text-gray-400 uppercase text-[10px] tracking-wider sticky top-0 z-10">
                 <tr>
+                  <th className="px-6 py-6">No</th>
                   <th className="px-6 py-4">Staff ID</th>
                   <th className="px-6 py-4">Name</th>
-                  <th className="px-6 py-4">Faculty / Dept</th>
+                  <th className="px-6 py-4">Faculty</th>
+                  <th className="px-6 py-4">Department</th>
                   <th className="px-6 py-4">Role</th>
                   <th className="px-6 py-4">Email</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4 text-center">Actions</th>
+                  <th className="px-6 py-4">Phone-No</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800 ">
-                {lecturers.map((lecturer, idx) => (
+                {lectureData.map((lecturer, idx) => (
                   <tr key={idx} className="transition-colors hover:bg-white/5">
-                    <td className="px-6 py-4 font-mono text-xs text-blue-400">
-                      {lecturer.id}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-8 h-8 text-xs font-bold text-purple-400 rounded-full bg-purple-900/50">
-                          {lecturer.initial}
-                        </div>
-                        <span className="font-medium">{lecturer.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="font-medium">{lecturer.faculty}</div>
-                      <div className="text-[10px] text-gray-500 uppercase">
-                        {lecturer.dept}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-xs italic text-gray-400">
-                      {lecturer.role}
-                    </td>
-                    <td className="px-6 py-4 text-gray-400">
-                      {lecturer.email}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${lecturer.status === "Active" ? "bg-green-500/10 text-green-400" : "bg-gray-500/10 text-gray-400"}`}
-                      >
-                        {lecturer.status}
-                      </span>
-                    </td>
+                    <td className="px-6 py-4">{idx + 1}</td>
+                    <td className="px-6 py-4">{lecturer.staff_id}</td>
+                    <td className="px-6 py-4">{lecturer.full_name}</td>
+                    <td className="px-6 py-4">{lecturer.faculty}</td>
+                    <td className="px-6 py-4">{lecturer.department}</td>
+                    <td className="px-6 py-4">{lecturer.academic_role}</td>
+                    <td className="px-6 py-4">{lecturer.email}</td>
+                    <td className="px-6 py-4">{lecturer.phone_number}</td>
                     <td className="px-6 py-4">
                       <div className="flex justify-center gap-3 text-gray-400">
                         <FaEdit
@@ -186,7 +139,12 @@ const LecturerManagement = () => {
       </main>
 
       {isAddLecturerFormOpen && (
-        <AddLecturerForm onClose={() => setIsAddLecturerFormOpen(false)} />
+        <AddLecturerForm
+          onClose={() => {
+            setIsAddLecturerFormOpen(false);
+            fetchLectur();
+          }}
+        />
       )}
     </div>
   );
