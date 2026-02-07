@@ -6,6 +6,7 @@ import { MdOutlinePageview } from "react-icons/md";
 import CreateSubjectForm from "./CreateSubjectForm";
 import AssignSubjectForm from "./AssignSubjectForm";
 import ViewSubjectAndLecture from "./ViewSubjectAndLecture";
+import AssignSubjectToStudent from "./AssignSubjectToStudent";
 import { Link } from "react-router-dom";
 
 const SubjectManagement = () => {
@@ -22,7 +23,7 @@ const SubjectManagement = () => {
   };
 
   const handleCardClick3 = () => {
-    setActiveView("view");
+    setActiveView("subjecttostudent");
     setIsFormOpen(true);
   };
   const renderActiveComponent = () => {
@@ -35,8 +36,8 @@ const SubjectManagement = () => {
       case "assign":
         return <AssignSubjectForm onClose={() => setIsFormOpen(false)} />;
 
-      case "view":
-        return <ViewSubjectAndLecture onClose={() => setIsFormOpen(false)} />;
+      case "subjecttostudent":
+        return <AssignSubjectToStudent onClose={() => setIsFormOpen(false)} />;
 
       default:
         return null;
@@ -57,7 +58,7 @@ const SubjectManagement = () => {
           {/* Card 1 */}
           <div
             onClick={handleCardClick1}
-            className={`cursor-pointer p-8 rounded-2xl border-2 transition-all w-1/3 bg-[#111827] flex flex-col justify-between
+            className={`cursor-pointer p-8 rounded-2xl border-2 transition-all w-1/4 bg-[#111827] flex flex-col justify-between
     ${activeView === "create" ? "border-blue-500 shadow-lg shadow-blue-900/20" : "border-gray-800 hover:border-blue-400"}`}
           >
             <div>
@@ -74,7 +75,7 @@ const SubjectManagement = () => {
           {/* Card 2 */}
           <div
             onClick={handleCardClick2}
-            className={`cursor-pointer p-8 rounded-2xl border-2 transition-all w-1/3 bg-[#111827] flex flex-col justify-between
+            className={`cursor-pointer p-8 rounded-2xl border-2 transition-all w-1/4 bg-[#111827] flex flex-col justify-between
     ${activeView === "assign" ? "border-blue-500 shadow-lg shadow-blue-900/20" : "border-gray-800 hover:border-blue-400"}`}
           >
             <div>
@@ -89,7 +90,7 @@ const SubjectManagement = () => {
           </div>
 
           {/* Card 3 */}
-          <Link to="/viewsubjectandlecture" className="block w-1/3">
+          <Link to="/viewsubjectandlecture" className="block w-1/4">
             <div className="h-full cursor-pointer p-8 rounded-2xl border-2 transition-all bg-[#111827] border-gray-800 hover:border-blue-400 flex flex-col justify-between">
               <div>
                 <div className="mb-4 text-3xl text-blue-400">
@@ -98,6 +99,20 @@ const SubjectManagement = () => {
                 <h3 className="text-xl font-bold">View subject & lecture</h3>
                 <p className="mt-2 text-sm text-gray-400">
                   View created subjects and assigned subject
+                </p>
+              </div>
+            </div>
+          </Link>
+          {/*card 4*/}
+          <Link to="/assignsubjecttostudent" className="block w-1/4">
+            <div className="h-full cursor-pointer p-8 rounded-2xl border-2 transition-all bg-[#111827] border-gray-800 hover:border-blue-400 flex flex-col justify-between">
+              <div>
+                <div className="mb-4 text-3xl text-blue-400">
+                  <GiTeacher />
+                </div>
+                <h3 className="text-xl font-bold">Assign Subject to Student</h3>
+                <p className="mt-2 text-sm text-gray-400">
+                  Link existing subjects to students
                 </p>
               </div>
             </div>
