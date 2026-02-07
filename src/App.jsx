@@ -13,7 +13,7 @@ import CreateSubjectForm from "./component/subject management/CreateSubjectForm"
 import AssignSubjectForm from "./component/subject management/AssignSubjectForm";
 import ViewSubjectAndLecture from "./component/subject management/ViewSubjectAndLecture";
 import AttendenceDashboard from "./component/admin/attendence/AttendenceDashboard";
-
+import AssignSubjectToStudent from "./component/subject management/AssignSubjectToStudent";
 function App() {
   return (
     <BrowserRouter>
@@ -29,6 +29,10 @@ function App() {
         <Route path="/subjectmanagement" element={<SubjectManagement />} />
         <Route path="/createsubjecform" element={<CreateSubjectForm />} />
         <Route path="/assignsubjectform" element={<AssignSubjectForm />} />
+        <Route
+          path="/assignsubjecttostudent"
+          element={<AssignSubjectToStudent />}
+        />
         <Route
           path="/viewsubjectandlecture"
           element={<ViewSubjectAndLecture />}
