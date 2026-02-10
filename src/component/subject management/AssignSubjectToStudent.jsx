@@ -5,19 +5,91 @@ import axios from "axios";
 
 const AssignSubjectToStudent = () => {
   const [subject, setsubject] = useState([]);
+  const [academicyears, setacademicyears] = useState([]);
+  const [student, setstudent] = useState([]);
+  const [selectSubject, setSelectSubject] = useState(null);
+  const [selectAcademicYear, setSelectAcademicYear] = useState("");
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchinitialdata = async () => {
       try {
         const subReg = await axios.get(
-          "http://localhost:5104/api/Auth/getSubjectIDandName",
+          "http://localhost:5104/api/Auth/getSubjectDetails",
         );
+        const yearReg = await axios.get(
+          "http://localhost:5104/api/Auth/getAvailableYears",
+        );
+
         setsubject(subReg.data);
+        setacademicyears(yearReg.data);
       } catch (err) {
         console.error("Data fetching failed", err);
       }
     };
+
     fetchinitialdata();
   }, []);
+
+  const haddelApplyFilter = async () => {
+    if (!selectAcademicYear || selectSubject === null) {
+      alert("Please Select Academic Year and Subject Code");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await axios.get(
+        `http://localhost:5104/api/Auth/getStudentsByYear?year=${selectAcademicYear}`,
+      );
+      const mappedStudents = res.data.map((st) => ({
+        ...st,
+        assigned: false,
+      }));
+      setstudent(mappedStudents);
+    } catch (err) {
+      console.error("Not have Student!", err);
+      setstudent([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleAssign = (regNo) => {
+    setstudent((prev) =>
+      prev.map((s) =>
+        s.st_registation_no === regNo ? { ...s, assigned: !s.assigned } : s,
+      ),
+    );
+  };
+
+  const handleFinalAssign = async () => {
+    const selectedStudents = student.filter((s) => s.assigned);
+    if (selectedStudents.length === 0) {
+      alert("Please select at least one student!");
+      return;
+    }
+
+    const assignData = {
+      subjectId: selectSubject.id,
+      type: selectSubject.type,
+      studentRegNos: selectedStudents.map((s) => s.st_registation_no),
+    };
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "http://localhost:5104/api/Auth/assignSubjects",
+        assignData,
+      );
+      alert(response.data.message || " Assign ok!");
+      setstudent([]);
+    } catch (err) {
+      alert("Assign not complete!.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="flex bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#4c1d95] min-h-screen text-white font-sans">
       <Sidebar />
@@ -34,7 +106,15 @@ const AssignSubjectToStudent = () => {
               Select Subject
             </label>
             <div className="relative group">
-              <select className="w-full pl-4 pr-10 py-2.5 bg-[#1a1c26] border border-gray-700 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50 transition-all text-sm text-gray-300 cursor-pointer">
+              <select
+                onChange={(e) => {
+                  const sub = subject.find(
+                    (s) => s.subject_Code === e.target.value,
+                  );
+                  setSelectSubject(sub);
+                }}
+                className="w-full pl-4 pr-10 py-2.5 bg-[#1a1c26] border border-gray-700 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50 transition-all text-sm text-gray-300 cursor-pointer"
+              >
                 <option value="" disabled selected hidden>
                   Choose Subject
                 </option>
@@ -57,12 +137,18 @@ const AssignSubjectToStudent = () => {
               Academic Year
             </label>
             <div className="relative group">
-              <select className="w-full pl-4 pr-10 py-2.5 bg-[#1a1c26] border border-gray-700 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50 transition-all text-sm text-gray-300 cursor-pointer">
+              <select
+                onChange={(e) => setSelectAcademicYear(e.target.value)}
+                className="w-full pl-4 pr-10 py-2.5 bg-[#1a1c26] border border-gray-700 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50 transition-all text-sm text-gray-300 cursor-pointer"
+              >
                 <option value="" disabled selected hidden>
                   Choose Year
                 </option>
-                <option>2023/2024</option>
-                <option>2024/2025</option>
+                {academicyears.map((year, index) => (
+                  <option key={index} value={year}>
+                    {year}
+                  </option>
+                ))}
               </select>
               <MdKeyboardArrowDown
                 className="absolute text-gray-500 transition-colors -translate-y-1/2 pointer-events-none right-3 top-1/2 group-focus-within:text-blue-500"
@@ -71,8 +157,14 @@ const AssignSubjectToStudent = () => {
             </div>
           </div>
 
-          <button className="px-6 py-2 mb-1 ml-auto text-sm font-bold text-white transition-all bg-blue-600 shadow-lg hover:bg-blue-700 rounded-xl shadow-blue-900/20">
+          <button
+            onClick={haddelApplyFilter}
+            className="px-6 py-2 mb-1 ml-auto text-sm font-bold text-white transition-all bg-blue-600 shadow-lg hover:bg-blue-700 rounded-xl shadow-blue-900/20"
+          >
             Apply Filters
+          </button>
+          <button className="px-6 py-2 mb-1 ml-auto text-sm font-bold text-white transition-all bg-red-600 shadow-lg hover:bg-red-700 rounded-xl shadow-red-900/20">
+            Assign Subject
           </button>
         </div>
 
@@ -81,30 +173,43 @@ const AssignSubjectToStudent = () => {
           <table className="w-full text-sm text-left">
             <thead className="bg-[#1a1c26] text-gray-400 uppercase text-[10px] tracking-wider sticky top-0 z-10">
               <tr>
-                <th className="px-6 py-5 text-center">Assign</th>
+                <th className="px-6 py-5 text-center">No</th>
                 <th className="px-6 py-4">Reg-No</th>
                 <th className="px-6 py-4">Subject Code</th>
-                <th className="px-6 py-4">Level</th>
-                <th className="px-6 py-4">Semester</th>
                 <th className="px-6 py-4">Type</th>
-                <th className="px-6 py-4 text-center">Action</th>
+                <th className="px-6 py-4 text-center">Assign</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800/50">
-              <tr className="transition-colors hover:bg-white/5">
-                <td className="px-6 py-4 text-center">
-                  <input
-                    type="checkbox"
-                    className="text-blue-600 bg-gray-800 border-gray-700 rounded focus:ring-blue-500"
-                  />
-                </td>
-                <td className="px-6 py-4">REG/2021/001</td>
-                <td className="px-6 py-4 text-blue-400">TICT1232</td>
-                <td className="px-6 py-4">Level 1</td>
-                <td className="px-6 py-4 text-gray-400">Semester 1</td>
-                <td className="px-6 py-4">Theory</td>
-                <td className="px-6 py-4 text-center text-gray-500">---</td>
-              </tr>
+              {student.length > 0 ? (
+                student.map((st, index) => (
+                  <tr key={st.st_registation_no} className="hover:bg-white/5">
+                    <td className="px-6 py-4 text-center">{index + 1}</td>
+                    <td className="px-6 py-4">{st.st_registation_no}</td>
+                    <td className="px-6 py-4 text-blue-400">
+                      {selectSubject.subject_Code}
+                    </td>
+                    <td className="px-6 py-4">{selectSubject.type}</td>
+                    <td className="px-6 py-4 text-center">
+                      <input
+                        type="checkbox"
+                        checked={st.assigned || false}
+                        onChange={() => toggleAssign(st.st_registation_no)}
+                        className="w-4 h-4 text-blue-600 border-gray-700 rounded"
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="4"
+                    className="px-6 py-10 text-center text-gray-500"
+                  >
+                    No students loaded. Apply filters first.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
