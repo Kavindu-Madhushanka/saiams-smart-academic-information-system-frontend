@@ -1,9 +1,65 @@
 import { IoClose } from "react-icons/io5";
 import { ImBooks } from "react-icons/im";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 const AssignSubjectForm = ({ onClose }) => {
+  const [subjectList, setSubjectList] = useState([]);
+  const [lecturerList, setLecturerList] = useState([]);
+
+  const [selectedSubject, setSelectedSubject] = useState(null);
+  const [selectedLecturer, setSelectedLecturer] = useState(null);
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const subRes = await axios.get(
+          "http://localhost:5104/api/Auth/getSubjectDetails",
+        );
+        const lecRes = await axios.get(
+          "http://localhost:5104/api/Auth/getLecturersDetails",
+        );
+
+        setSubjectList(subRes.data);
+        setLecturerList(lecRes.data);
+      } catch (err) {
+        console.error("Data fetch error:", err);
+      }
+    };
+    fetchInitialData();
+  }, []);
+
+  const handleSubjectChange = (e) => {
+    const sub = subjectList.find((s) => s.subject_Name === e.target.value);
+    setSelectedSubject(sub);
+  };
+
+  const handleLecturerChange = (e) => {
+    const lec = lecturerList.find((l) => l.staff_id === e.target.value);
+    setSelectedLecturer(lec);
+  };
+
+  const hadleAssignButton = async (e) => {
+    e.preventDefault();
+    const data = {
+      lecture_id: selectedLecturer.id,
+      subject_id: selectedSubject.id,
+    };
+
+    try {
+      const send = await axios.post(
+        "http://localhost:5104/api/Auth/putLectureSubject",
+        data,
+      );
+      alert("Successful Asign Subject to Lecture");
+    } catch {
+      if (data == []) alert("data is not select");
+    }
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center ml-64 bg-black/40 ">
-      {/* Modal Card */}
       <div className="bg-white text-[#1a1c26] w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
@@ -22,107 +78,112 @@ const AssignSubjectForm = ({ onClose }) => {
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 transition-colors rounded-full hover:bg-gray-100"
+            className="p-2 text-gray-400 rounded-full hover:bg-gray-100"
           >
             <IoClose size={24} />
           </button>
         </div>
 
-        {/* Form Body */}
         <div className="grid grid-cols-2 gap-6 p-8">
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-700">
               Select Subject <span className="text-blue-500">*</span>
             </label>
             <select
-              name="subname"
+              onChange={handleSubjectChange}
               className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             >
-              <option>Data Structure</option>
-              <option>Advance Web Technology</option>
+              <option value="">Choose Subject</option>
+              {subjectList.map((sub, index) => (
+                <option key={index} value={sub.subject_Name}>
+                  {sub.subject_Name}
+                </option>
+              ))}
             </select>
           </div>
 
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-700">
-              Select Subject Code <span className="text-blue-500">*</span>
+              Subject Code
             </label>
-            <select
-              name="subcode"
-              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            >
-              <option>TICT2132</option>
-              <option>TICT2121</option>
-            </select>
+            <input
+              type="text"
+              readOnly
+              value={selectedSubject?.subject_Code || ""}
+              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-100 text-gray-500 outline-none"
+              placeholder="Auto-filled"
+            />
           </div>
 
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-700">
-              Subject Type <span className="text-blue-500">*</span>
+              Subject Type
             </label>
-            <select
-              name="subjectType"
-              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            >
-              <option>Theory</option>
-              <option selected>Practical</option>
-            </select>
+            <input
+              type="text"
+              readOnly
+              value={selectedSubject?.type || ""}
+              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-100 text-gray-500 outline-none"
+            />
           </div>
 
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-700">
-              Academic Level <span className="text-blue-500">*</span>
+              Academic Level
             </label>
-            <select
-              name="Level"
-              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            >
-              <option>Level 1</option>
-              <option>Level 2</option>
-              <option>Level 3</option>
-              <option>Level 4</option>
-            </select>
+            <input
+              type="text"
+              readOnly
+              value={selectedSubject?.academic_Level || ""}
+              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-100 text-gray-500 outline-none"
+            />
           </div>
 
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-700">
-              Semester <span className="text-blue-500">*</span>
+              Semester
             </label>
-            <select
-              name="subjectType"
-              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            >
-              <option>Semester 1</option>
-              <option>Semester 2</option>
-            </select>
+            <input
+              type="text"
+              readOnly
+              value={selectedSubject?.semester || ""}
+              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-100 text-gray-500 outline-none"
+            />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">
-              Lecture Name <span className="text-blue-500">*</span>
-            </label>
-            <select
-              name="lecturename"
-              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            >
-              <option>L.K.Madhushankha</option>
-              <option>G.M.E.Hansika</option>
-            </select>
-          </div>
-
+          {/* Lecture ID - Dropdown */}
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-700">
               Lecture ID <span className="text-blue-500">*</span>
             </label>
             <select
-              name="lectureid"
+              onChange={handleLecturerChange}
               className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             >
-              <option>LCICT21</option>
-              <option>LCICT45</option>
+              <option value="">Select ID</option>
+              {lecturerList.map((lec, index) => (
+                <option key={index} value={lec.staff_id}>
+                  {lec.staff_id}
+                </option>
+              ))}
             </select>
           </div>
+
+          {/* Lecture Name - Auto Fill (Input) */}
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Lecture Name
+            </label>
+            <input
+              type="text"
+              readOnly
+              value={selectedLecturer?.full_name || ""}
+              className="w-full border border-gray-200 rounded-lg p-2.5 bg-gray-100 text-gray-500 outline-none"
+              placeholder="Lecturer Name"
+            />
+          </div>
         </div>
+
         {/* Footer */}
         <div className="flex justify-end gap-3 p-6 border-t border-gray-100 bg-gray-50">
           <button
@@ -131,8 +192,11 @@ const AssignSubjectForm = ({ onClose }) => {
           >
             Cancel
           </button>
-          <button className="px-6 py-2 font-medium text-white transition-all bg-blue-600 rounded-lg shadow-md hover:bg-blue-700">
-            Create Subject
+          <button
+            onClick={hadleAssignButton}
+            className="px-6 py-2 font-medium text-white transition-all bg-blue-600 rounded-lg shadow-md hover:bg-blue-700"
+          >
+            Assign
           </button>
         </div>
       </div>
